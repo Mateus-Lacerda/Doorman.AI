@@ -12,6 +12,7 @@ The system leverages facial recognition technology to identify users and manage 
 - **Facial Recognition**: Identify users based on their facial features.
 - **Image Management**: Upload, retrieve, update, and delete user images.
 - **RESTful API**: Exposes endpoints for seamless integration with other systems.
+- **Frontend Interface**: User-friendly interface for interacting with the system.
 
 ## Installation
 
@@ -19,7 +20,7 @@ The system leverages facial recognition technology to identify users and manage 
 
 - Python 3.11+
 - MySQL
-- Node.js (optional, for frontend development)
+- Node.js
 
 ### Backend Setup
 
