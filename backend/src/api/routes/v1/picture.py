@@ -46,7 +46,7 @@ class Picture(BaseModel):
 class PictureResponse(BaseModel):
     message: str = Field(..., description="The message of the response")
     image: Optional[str] = Field(..., description="The image of the user")
-    user_id: Optional[str] = Field(..., description="The unique identifier for the user")
+    user_id: Optional[int] = Field(..., description="The unique identifier for the user")
     success: bool = Field(True, description="The success of the operation")
 
 

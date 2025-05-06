@@ -24,7 +24,6 @@ const renderMainMenu = () => {
     const deleteUserButton = document.getElementById('delete-user');
     const searchUsersButton = document.getElementById('search-user');
 
-
     // Add user
     addUserButton.addEventListener('click', function() {
         // Show the add user form
@@ -57,7 +56,6 @@ const renderMainMenu = () => {
         addUserForm.addEventListener('submit', function(event) {
             event.preventDefault();
             // Clear the form and get the picture
-            const containerId = 'app';
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
@@ -69,6 +67,7 @@ const renderMainMenu = () => {
                 apartment: apartment
             });
             userId = response.id;
+            const containerId = 'app';
             captureCameraImage(document, containerId)
                 .then((dataUrl) => {
                     // Save the picture to the server

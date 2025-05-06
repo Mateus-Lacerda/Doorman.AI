@@ -1,0 +1,12 @@
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+*.egg-info
+*.eggs
+
+.venv
+*/__pycache__/
+__pycache__
+
+*.png
