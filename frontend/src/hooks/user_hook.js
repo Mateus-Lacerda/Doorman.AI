@@ -1,4 +1,4 @@
-const apiBaseUrl = 'http://localhost:8000/api/v1/user';
+const apiBaseUrl = 'http://localhost:8042/api/v1/user';
 
 
 export const userHook = {

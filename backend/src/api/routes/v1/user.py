@@ -1,6 +1,7 @@
 from typing import Optional
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 from pydantic import BaseModel, Field
 
 from src.api.utils import get_db_pool
@@ -59,7 +60,7 @@ async def get_user(user_id: int):
             phone=result[4]
         )
     else:
-        return None
+        raise HTTPException(status_code=404, detail="User not found")
 
 
 @user_router.post("/", response_model=User)

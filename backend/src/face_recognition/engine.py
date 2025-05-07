@@ -1,7 +1,14 @@
-import face_recognition as fr
 import os
+from warnings import deprecated
+
+import face_recognition as fr
+
+# ----- DEPRECATED ----- #
+# The solution with the local file system is not the best.
+# The times with about 90 users are already taking a long time.
 
 
+@deprecated(reason="This function is deprecated and will be removed in future versions.")
 def face_recognizer(photo_url):
     photo = fr.load_image_file(photo_url)
     face = fr.face_encodings(photo)
@@ -11,6 +18,7 @@ def face_recognizer(photo_url):
     return False, None
 
 
+@deprecated(reason="This function is deprecated and will be removed in future versions.")
 def prepare_faces():
     known_faces = []
     faces_names = []
@@ -18,8 +26,13 @@ def prepare_faces():
 
     for image in os.listdir('./pessoas/img'):
         if image.endswith('.png'):
-            known_faces.append(face_recognizer((
-                './pessoas/img/' + image))[1][0])
+            recognized, face = face_recognizer(
+                './pessoas/img/' + image)
+            if not recognized:
+                continue
+            if len(face) == 0:
+                continue
+            known_faces.append(face[0])
             faces_names.append(image.split('.')[0])
             with open('./pessoas/img/' + image, 'rb') as f:
                 images.append(f.read())
@@ -27,6 +40,7 @@ def prepare_faces():
     return known_faces, faces_names, images
 
 
+@deprecated(reason="This function is deprecated and will be removed in future versions.")
 def recognize(image: str) -> tuple[str, str | None]:
     """
     Recognize a face in an image.
@@ -52,6 +66,7 @@ def recognize(image: str) -> tuple[str, str | None]:
     return 'Rosto não identificado, tente novamente.', None
 
 
+@deprecated(reason="This function is deprecated and will be removed in future versions.")
 def save_photo(id: int, image: str) -> None:
     """
     Save the photo to the database.
@@ -72,6 +87,7 @@ def save_photo(id: int, image: str) -> None:
         f.write(image)
 
 
+@deprecated(reason="This function is deprecated and will be removed in future versions.")
 def get_photo(id: int) -> str:
     """
     Get the photo from the database.
@@ -82,6 +98,7 @@ def get_photo(id: int) -> str:
         return f.read()
 
 
+@deprecated(reason="This function is deprecated and will be removed in future versions.")
 def delete_photo(id: int) -> None:
     """
     Delete the photo from the database.
@@ -94,6 +111,7 @@ def delete_photo(id: int) -> None:
     return None
 
 
+@deprecated(reason="This function is deprecated and will be removed in future versions.")
 def update_photo(id: int, image: str) -> None:
     """
     Update the photo in the database.
