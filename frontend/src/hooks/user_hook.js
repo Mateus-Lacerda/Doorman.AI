@@ -71,5 +71,26 @@ export const userHook = {
             console.error('Error:', error);
             throw error;
         }
+    },
+
+    async searchUser(searchParams) {
+        try {
+            const response = await fetch(`${apiBaseUrl}/search`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(searchParams),
+            });
+            if (!response.ok) {
+                throw new Error(`Error searching user: ${response.statusText}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
     }
+
 };

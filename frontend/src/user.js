@@ -9,6 +9,8 @@ import { captureCameraImage } from './util.js'
 const renderMainMenu = () => {
     document.querySelector('#app').innerHTML = `
         <h1>CV Doorman</h1>
+        <button id="back-button">Home</button>
+        <br><br>
         <div id="select-operation">
             <button id="add-user">Add User</button>
             <br><br>
@@ -19,10 +21,17 @@ const renderMainMenu = () => {
             <button id="search-user">Search User</button>
         </div>
     `;
+    const backButton = document.getElementById('back-button');
     const addUserButton = document.getElementById('add-user');
     const editUserButton = document.getElementById('edit-user');
     const deleteUserButton = document.getElementById('delete-user');
     const searchUsersButton = document.getElementById('search-user');
+
+    // Go back to the main menu
+    backButton.addEventListener('click', function() {
+        // Go back to the home page
+        window.location.href = 'index.html';
+    });
 
     // Add user
     addUserButton.addEventListener('click', function() {
@@ -60,33 +69,37 @@ const renderMainMenu = () => {
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
             const apartment = document.getElementById('apartment').value;
-            response = userHook.addUser({
+            const response = userHook.addUser({
                 name: name,
                 email: email,
                 phone: phone,
                 apartment: apartment
+            }).then((response) => {
+                console.log('User added successfully:', response);
+                const userId = response.id;
+                const containerId = 'app';
+                captureCameraImage(document, containerId)
+                    .then((dataUrl) => {
+                        // Save the picture to the server
+                        const pictureData = {
+                            user_id: parseInt(userId),
+                            image: dataUrl,
+                        };
+                        console.log('Picture data:', pictureData);
+                        pictureHook.addPicture(pictureData)
+                            .then((response) => {
+                                console.log('Picture added successfully:', response);
+                            })
+                            .catch((error) => {
+                                console.error('Error adding picture:', error);
+                            });
+                    })
+                    .catch((error) => {
+                        console.error('Error capturing image:', error);
+                    });
+            }).catch((error) => {
+                console.error('Error adding user:', error);
             });
-            userId = response.id;
-            const containerId = 'app';
-            captureCameraImage(document, containerId)
-                .then((dataUrl) => {
-                    // Save the picture to the server
-                    const pictureData = {
-                        user_id: userId,
-                        image: dataUrl,
-                    };
-                    console.log('Picture data:', pictureData);
-                    pictureHook.addPicture(pictureData)
-                        .then((response) => {
-                            console.log('Picture added successfully:', response);
-                        })
-                        .catch((error) => {
-                            console.error('Error adding picture:', error);
-                        });
-                })
-                .catch((error) => {
-                    console.error('Error capturing image:', error);
-                });
         });
     });
 
@@ -188,7 +201,7 @@ const renderMainMenu = () => {
             event.preventDefault();
             const userId = document.getElementById('user-id').value;
             userHook.deleteUser(userId);
-            pictureHook.deletePicture(userId)
+            pictureHook.deletePictureData(userId)
                 .then((response) => {
                     console.log('Picture deleted successfully:', response);
                 })
@@ -207,8 +220,17 @@ const renderMainMenu = () => {
             <button id="back-button">Back</button>
             <br><br>
             <form id="search-user-form">
-                <label for="user-id">User ID:</label>
-                <input type="text" id="user-id" name="user-id" required>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name">
+                <br><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+                <br><br>
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone">
+                <br><br>
+                <label for="apartment">Apartment:</label>
+                <input type="text" id="apartment" name="apartment">
                 <br><br>
                 <button type="submit">Search User</button>
             </form>
@@ -221,18 +243,33 @@ const renderMainMenu = () => {
         const searchUserForm = document.getElementById('search-user-form');
         searchUserForm.addEventListener('submit', function(event) {
             event.preventDefault();
-            const userId = document.getElementById('user-id').value;
-            userHook.getUserData(userId)
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const apartment = document.getElementById('apartment').value;
+            const searchParams = {
+                name: name,
+                email: email,
+                phone: phone,
+                apartment: apartment
+            };
+            const response = userHook.searchUser(searchParams)
                 .then((response) => {
-                    console.log('User data:', response);
                     // Show the user data
                     document.querySelector('#app').innerHTML = `
                         <h1>User Data</h1>
-                        <p>Name: ${response.name}</p>
-                        <p>Email: ${response.email}</p>
-                        <p>Phone: ${response.phone}</p>
-                        <p>Apartment: ${response.apartment}</p>
                     `;
+                    response.forEach(user => {
+                        document.querySelector('#app').innerHTML += `
+                            <h2>User ID: ${user.id}</h2>
+                            <p>Name: ${user.name}</p>
+                            <p>Email: ${user.email}</p>
+                            <p>Phone: ${user.phone}</p>
+                            <p>Apartment: ${user.apartment}</p>
+                            <br><br>
+                        `;
+                    console.log('User data:', user);
+                    });
                 })
                 .catch((error) => {
                     console.error('Error getting user data:', error);

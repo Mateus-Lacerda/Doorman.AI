@@ -60,11 +60,11 @@ async def post_picture(picture: Picture):
     """
     image = decode_image(picture.image)
     save_photo(picture.user_id, image)
-    name, image = get_photo(picture.user_id)
+    image = get_photo(picture.user_id)
     image = encode_image(image)
     if image is not None:
         return PictureResponse(
-            message=name,
+            message="Picture added succesfully",
             image=image,
             user_id=picture.user_id,
             success=True

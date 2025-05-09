@@ -49,10 +49,17 @@ const handleResponse = (data) => {
 const showCamera = (document) => {
     document.querySelector('#app').innerHTML = `
         <h1>CV Doorman</h1>
+        <button id="back-button">Home</button>
+        <br><br>
         <video id="video" width="640" height="480" autoplay></video>
+        <h2>Please look at the camera!</h2>
         <button id="startButton">Take Photo</button>
-        <canvas id="canvas" width="640" height="480"></canvas>
+        <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
     `;
+    const backButton = document.getElementById('back-button');
+    backButton.addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
     const video = document.getElementById('video');
     const startButton = document.getElementById('startButton');
     const canvas = document.getElementById('canvas');

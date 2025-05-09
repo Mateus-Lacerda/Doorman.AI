@@ -29,6 +29,8 @@ class UserSearch(BaseModel):
     apartment: Optional[str] = Field(
         None, description="The apartment number of the user")
     name: Optional[str] = Field(None, description="The name of the user")
+    phone: Optional[str] = Field(
+        None, description="The phone number of the user")
 
 
 user_router = APIRouter(prefix="/user", tags=["user"])
@@ -147,7 +149,7 @@ async def delete_user(user_id: int):
     return {"message": "User deleted successfully"}
 
 
-@user_router.get("/search", response_model=list[User])
+@user_router.post("/search", response_model=list[User])
 async def search_users(search: UserSearch):
     """
     Search for users by email or apartment.
@@ -157,7 +159,7 @@ async def search_users(search: UserSearch):
     async with pool.acquire() as conn:
         async with conn.cursor() as cursor:
             # Build the query based on the provided parameters
-            query = "SELECT * FROM users WHERE 1=1"
+            query = "SELECT id, email, apartment, name, phone FROM users WHERE 1=1"
             params = []
             if search.email:
                 email = search.email
@@ -171,6 +173,10 @@ async def search_users(search: UserSearch):
                 name = search.name
                 query += " AND name LIKE %s"
                 params.append(f"%{name}%")
+            if search.phone:
+                phone = search.phone
+                query += " AND phone LIKE %s"
+                params.append(f"%{phone}%")
 
             # Execute the query to search for users
             await cursor.execute(query, tuple(params))

@@ -133,3 +133,55 @@ button:focus-visible {
     width: 50%;
 }
 
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+form label {
+    font-size: 1.3em;
+    font-weight: 510;
+    font-family: inherit;
+    align-self: flex-start;
+}
+
+form input {
+    border-radius: 12px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #1a1a1a;
+    cursor: pointer;
+    transition: border-color 0.25s;
+}
+
+form input:hover {
+    border-color: #646cff;
+}
+
+form button {
+    width: 100%;
+    max-width: 300px;
+}
+
+#back-button {
+    max-width: 200px;
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.25s;
+}
+
+#back-button:hover {
+    border-color: #646cff;
+}

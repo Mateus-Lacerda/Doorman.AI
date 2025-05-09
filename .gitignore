@@ -24,10 +24,13 @@ dist-ssr
 *.sw?
 
 # Python stuff
-__pycache__/
+__pycache__/*
+**/__pycache__/
 *.py[cod]
 *.pyo
 *.pyd
 *.pdb
+*.pdc
 
 **/pessoas/**
+*.png
